@@ -1,8 +1,15 @@
-import torchvision
-import torchvision.models as models
+import cv2
+from detector.lowrankprojector import LowRankProjector
+from utils import boundingboxes
 
 def main():
-    model = torchvision.models.mobilenet_v3_large(pretrained=True)
+    model = LowRankProjector()
+    webcam = cv2.VideoCapture(0)
+
+    while True:
+        _, image = webcam.read()
+        output = model(image, copy_image=True)
+        boundingboxes.show_boxes(image, output["boxes"], duration=1)
 
 
 if __name__ == "__main__":
